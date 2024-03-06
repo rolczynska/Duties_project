@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Task
+from django.contrib.auth.models import User
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -17,3 +18,11 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ['id', 'title', 'description', 'completed', 'category', 'created', 'author',
                   'assigned_to']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    tasks = serializers.PrimaryKeyRelatedField(many=True, queryset=Task.objects.all())
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'tasks']
