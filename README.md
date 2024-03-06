@@ -1,5 +1,10 @@
 # Overview
 This app lets groups or families create tasks and categories, assign tasks to members, and mark them as completed. Built for an interview task, it simplifies managing group chores and activities.
+## Technologies
+- Python
+- Django
+- Django REST Framework
+- Docker
 ## Features
 - Task Management: Utilizes Category and Task models to organize tasks.
 - User Association: Employs the User model to link tasks with specific users.
@@ -50,31 +55,47 @@ Use HTTP clients like Postman or cURL for API interactions. Authenticate CRUD op
 ```
 curl http://127.0.0.1:8000/tasks/
 ```
-- List Users:
-```
-curl http://127.0.0.1:8000/users/
-```
 - Get Task Details:
 ```
 curl http://127.0.0.1:8000/tasks/1/
 ```
-- Create Task (with wrong Auth - it should fail):
+- List Users:
 ```
-curl -X POST -u "Alex:123password1231" -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to":4}' http://127.0.0.1:8000/tasks/
+curl http://127.0.0.1:8000/users/
 ```
-- Create Task (with Auth):
+- Get User Details
+(should contain only task 5):
 ```
-curl -X POST -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to":4}' http://127.0.0.1:8000/tasks/
+curl http://127.0.0.1:8000/users/4/
 ```
-- Modify Task (PUT):
+- Create Task (without Auth - it should fail):
 ```
-curl -X PUT -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"title": "Clean window", "description": "Clean all windows on the upper floor.", "category":1, "completed":"True"}' http://127.0.0.1:8000/tasks/1/
+curl -X POST -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to": 4}' http://127.0.0.1:8000/tasks/
 ```
-- Update Task (PATCH):
+- Create Task
+(with correct Auth - it should add task 7):
 ```
-curl -X PATCH -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"assigned_to":1}' http://127.0.0.1:8000/tasks/1/
+curl -X POST -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to": 4}' http://127.0.0.1:8000/tasks/
 ```
-- Delete Task:
+- Modify Task 7
+("title": "Vacuum living room" -> "title": "PLEASE vacuum living room"):
+```
+curl -X PUT -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"title": "PLEASE vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to": 4}' http://127.0.0.1:8000/tasks/7/
+```
+- Update Task 7
+("completed": false -> "completed": true):
+
+! Note that tasks are ordered by completion and date - completed task go to the end.
+```
+curl -X PATCH -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"completed": true}' http://127.0.0.1:8000/tasks/7/
+```
+- Get User Details
+(users tasks should contain task 5 and 7):
+```
+curl http://127.0.0.1:8000/users/4/
+```
+- Delete Task 
+(should delete task 7):
 ```
 curl -X DELETE -u "Alex:123password123" http://127.0.0.1:8000/tasks/7/
 ```
