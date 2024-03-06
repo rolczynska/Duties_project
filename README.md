@@ -28,7 +28,7 @@ docker build -t duties_project .
 ```
 3. **Start the Container**:
 ```
-docker run -p 8000:8000 duties_project
+docker run -d -p 8000:8000 duties_project
 ```
 4. **Access the app**
    
@@ -58,6 +58,10 @@ curl http://127.0.0.1:8000/users/
 ```
 curl http://127.0.0.1:8000/tasks/1/
 ```
+- Create Task (with wrong Auth - it should fail):
+```
+curl -X POST -u "Alex:123password1231" -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to":4}' http://127.0.0.1:8000/tasks/
+```
 - Create Task (with Auth):
 ```
 curl -X POST -u "Alex:123password123" -H 'Content-Type: application/json' -d '{"title": "Vacuum living room", "description": "Vacuum the entire living room.", "category":1, "assigned_to":4}' http://127.0.0.1:8000/tasks/
@@ -72,7 +76,7 @@ curl -X PATCH -u "Alex:123password123" -H 'Content-Type: application/json' -d '{
 ```
 - Delete Task:
 ```
-curl -X DELETE -u "Alex:123password123" http://127.0.0.1:8000/tasks/6/
+curl -X DELETE -u "Alex:123password123" http://127.0.0.1:8000/tasks/7/
 ```
 
 # Admin Access
