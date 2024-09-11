@@ -27,15 +27,33 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    tasks = serializers.PrimaryKeyRelatedField(many=True, queryset=Task.objects.all())
+    tasks = serializers.PrimaryKeyRelatedField(many=True, queryset=Task.objects.all(), required=False)
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'tasks']
+        fields = ['id', 'username', 'tasks', 'password', 'email']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
+    # add username to JWT token
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)

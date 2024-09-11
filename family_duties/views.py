@@ -21,9 +21,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related('tasks')
