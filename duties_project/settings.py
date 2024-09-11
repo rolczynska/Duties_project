@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'profiles.User'
 
 # Application definition
 
@@ -37,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'family_duties',
+    # third-party
     'rest_framework',
     'rest_framework.authtoken',
+    #local apps
+    'family_duties',
+    'profiles'
 ]
 
 MIDDLEWARE = [

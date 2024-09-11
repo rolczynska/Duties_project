@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import TaskSerializer, CategorySerializer, UserSerializer, MyTokenObtainPairSerializer
 from .models import Task,  Category
-from django.contrib.auth.models import User
+from profiles.models import User
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
