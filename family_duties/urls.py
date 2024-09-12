@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import CategoryViewSet, TaskViewSet, UserViewSet
+from .views import CategoryViewSet, TaskViewSet
+from profiles.views import UserViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,

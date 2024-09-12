@@ -1,9 +1,6 @@
 from rest_framework import permissions, viewsets
-from rest_framework_simplejwt.views import TokenObtainPairView
-
-from .serializers import TaskSerializer, CategorySerializer, UserSerializer, MyTokenObtainPairSerializer
+from .serializers import TaskSerializer, CategorySerializer
 from .models import Task,  Category
-from profiles.models import User
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -20,15 +17,3 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        return super().get_queryset().prefetch_related('tasks')
-
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
